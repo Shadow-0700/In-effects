@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #000000, #434343);
+            color: #ffffff;
+        }
+
+        .login-container {
+            display: flex;
+            width: 900px;
+            height: 500px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        /* Left Section */
+        .login-left {
+            flex: 1;
+            background: #121212;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #ffffff;
+        }
+
+        .login-left h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .login-left label {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .login-left input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            background: #333333;
+            color: #ffffff;
+        }
+
+        .login-left input::placeholder {
+            color: #aaaaaa;
+        }
+
+        .login-left .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .login-left .actions label {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .login-left .actions label input {
+            margin-right: 5px;
+        }
+
+        .login-left a {
+            color: #ff6666;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .login-left a:hover {
+            text-decoration: underline;
+        }
+
+        .login-left button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, #ff6666, #ff3333);
+            border: none;
+            border-radius: 5px;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-left button:hover {
+            background: linear-gradient(90deg, #ff3333, #cc0000);
+        }
+
+        /* Right Section */
+        .login-right {
+            flex: 1;
+            background: linear-gradient(135deg, #ff6666, #ff3333);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .login-right h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .login-right p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .login-right a {
+            padding: 10px 20px;
+            border: 2px solid #ffffff;
+            border-radius: 5px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .login-right a:hover {
+            background: #ffffff;
+            color: #ff3333;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Left Section -->
+        <div class="login-left">
+            <h2>Sign In</h2>
+            <form action="/submit_login" method="POST">
+                <label for="username">Gmail ID</label>
+                <input type="text" id="username" name="username" placeholder="Enter your Gmail ID" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your Password" required>
+
+                <div class="actions">
+                    <label>
+                        <input type="checkbox" name="remember">
+                        Remember Me
+                    </label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+
+                <button type="submit">Sign In</button>
+            </form>
+        </div>
+
+        <!-- Right Section -->
+        <div class="login-right">
+            <h2>Welcome to Login</h2>
+            <p>Don't have an account?</p>
+            <a href="/register">Sign Up</a>
+        </div>
+    </div>
+</body>
+</html>
