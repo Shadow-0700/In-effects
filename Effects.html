@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Particle Network</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0d1117;
+      overflow-x: hidden;
+      font-family: "Arial", sans-serif;
+    }
+
+    canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .parallax-heading {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 4rem;
+      font-weight: bold;
+      color: white;
+      text-align: center;
+      z-index: 10;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none;
+    }
+
+    .parallax-heading.hidden {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-20px);
+    }
+
+    .content {
+      margin-top: 150px;
+      color: white;
+      text-align: center;
+      font-size: 1.5rem;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Parallax Heading -->
+  <div class="parallax-heading" id="heading">Culrav</div>
+
+  <!-- Scrollable Content -->
+  <div class="content">
+    <p>Scroll down to see the "Culrav" heading fade out!</p>
+    <p>MNNIT'S BIGGEST CULUTURAL FEST</p>
+    <p></p>
+    <p></p>
+    <p style="margin-bottom: 1000px;"></p>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("particleCanvas");
+    const ctx = canvas.getContext("2d");
+    const heading = document.getElementById("heading");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const particleCount = 100;
+    const maxDistance = 150;
+
+    const mouse = {
+      x: null,
+      y: null,
+    };
+
+    // Update mouse position
+    window.addEventListener("mousemove", (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    // Handle resize
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Scroll event to hide/show heading
+    window.addEventListener("scroll", () => {
+      const scrollPosition = window.scrollY;
+      if (scrollPosition > 50) {
+        heading.classList.add("hidden");
+      } else {
+        heading.classList.remove("hidden");
+      }
+    });
+
+    // Particle constructor
+    function Particle(x, y) {
+      this.x = x || Math.random() * canvas.width;
+      this.y = y || Math.random() * canvas.height;
+      this.size = 3;
+      this.velocityX = (Math.random() - 0.5) * 2;
+      this.velocityY = (Math.random() - 0.5) * 2;
+
+      this.draw = function () {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = "#00ff99";
+        ctx.fill();
+      };
+
+      this.update = function () {
+        this.x += this.velocityX;
+        this.y += this.velocityY;
+
+        // Bounce off edges
+        if (this.x < 0 || this.x > canvas.width) this.velocityX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.velocityY *= -1;
+
+        this.draw();
+      };
+    }
+
+    // Create particles
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+
+    // Connect particles
+    function connectParticles() {
+      for (let a = 0; a < particles.length; a++) {
+        for (let b = a + 1; b < particles.length; b++) {
+          const dx = particles[a].x - particles[b].x;
+          const dy = particles[a].y - particles[b].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < maxDistance) {
+            ctx.beginPath();
+            ctx.moveTo(particles[a].x, particles[a].y);
+            ctx.lineTo(particles[b].x, particles[b].y);
+            ctx.strokeStyle = `rgba(0, 255, 153, ${1 - distance / maxDistance})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    // Animate the particles
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((particle) => particle.update());
+      connectParticles();
+
+      // Draw a line to the mouse position
+      particles.forEach((particle) => {
+        const dx = mouse.x - particle.x;
+        const dy = mouse.y - particle.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < maxDistance) {
+          ctx.beginPath();
+          ctx.moveTo(mouse.x, mouse.y);
+          ctx.lineTo(particle.x, particle.y);
+          ctx.strokeStyle = `rgba(0, 255, 153, ${1 - distance / maxDistance})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
