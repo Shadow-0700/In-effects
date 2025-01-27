@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flip Countdown Timer</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        .timer {
+            text-align: center;
+        }
+
+        .timer h1 {
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            color: #ffcc00;
+        }
+
+        .countdown {
+            display: flex;
+            gap: 15px;
+        }
+
+        .unit {
+            position: relative;
+            width: 80px;
+            height: 120px;
+            perspective: 1000px;
+        }
+
+        .card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #222;
+            color: #ffcc00;
+            line-height: 120px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            backface-visibility: hidden;
+            transform-origin: center;
+        }
+
+        .top {
+            transform: rotateX(0deg);
+        }
+
+        .bottom {
+            transform: rotateX(-90deg);
+        }
+
+        .next {
+            transform: rotateX(90deg);
+        }
+
+        .flipping .top {
+            animation: flipTop 0.5s forwards;
+        }
+
+        .flipping .next {
+            animation: flipNext 0.5s forwards;
+        }
+
+        @keyframes flipTop {
+            0% {
+                transform: rotateX(0deg);
+            }
+            100% {
+                transform: rotateX(-90deg);
+            }
+        }
+
+        @keyframes flipNext {
+            0% {
+                transform: rotateX(90deg);
+            }
+            100% {
+                transform: rotateX(0deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="timer">
+        <h1>COMING SOON ....</h1>
+        <div class="countdown">
+            <div class="unit" id="days">
+                <div class="card top">00</div>
+                <div class="card bottom">00</div>
+                <div class="card next">00</div>
+            </div>
+            <div class="unit" id="hours">
+                <div class="card top">00</div>
+                <div class="card bottom">00</div>
+                <div class="card next">00</div>
+            </div>
+            <div class="unit" id="minutes">
+                <div class="card top">00</div>
+                <div class="card bottom">00</div>
+                <div class="card next">00</div>
+            </div>
+            <div class="unit" id="seconds">
+                <div class="card top">00</div>
+                <div class="card bottom">00</div>
+                <div class="card next">00</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function countdownTimer() {
+            const targetDate = new Date();
+            targetDate.setDate(targetDate.getDate() + 7); // Set to 7 days from now
+
+            function updateUnit(unit, value) {
+                const top = unit.querySelector('.top');
+                const bottom = unit.querySelector('.bottom');
+                const next = unit.querySelector('.next');
+
+                if (top.textContent !== String(value).padStart(2, '0')) {
+                    next.textContent = String(value).padStart(2, '0');
+
+                    unit.classList.add('flipping');
+
+                    setTimeout(() => {
+                        top.textContent = next.textContent;
+                        bottom.textContent = next.textContent;
+                        unit.classList.remove('flipping');
+                    }, 500);
+                }
+            }
+
+            function updateTimer() {
+                const now = new Date();
+                const diff = targetDate - now;
+
+                if (diff <= 0) {
+                    clearInterval(timerInterval);
+                    document.querySelector('.timer').innerHTML = '<h1>Event Started!</h1>';
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                updateUnit(document.getElementById('days'), days);
+                updateUnit(document.getElementById('hours'), hours);
+                updateUnit(document.getElementById('minutes'), minutes);
+                updateUnit(document.getElementById('seconds'), seconds);
+            }
+
+            const timerInterval = setInterval(updateTimer, 1000);
+            updateTimer();
+        }
+
+        countdownTimer();
+    </script>
+</body>
+</html>
